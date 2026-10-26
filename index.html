@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>英文背誦小幫手</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--tx:#1d2433;--mu:#6b7488;--pr:#3b6ef5;--ok:#1f9d55;--bad:#d64545;--bd:#dde3ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121620;--card:#1c2230;--tx:#eef1f8;--mu:#97a1b8;--pr:#6b93ff;--ok:#43c47c;--bad:#ff7070;--bd:#2c3447}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,"Noto Sans TC","PingFang TC",sans-serif;min-height:100vh}
+.w{max-width:680px;margin:0 auto;padding:14px}
+h1{font-size:20px;margin:6px 0 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.t{flex:1;min-width:0;padding:10px 6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px;cursor:pointer}
+.t.on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.bar{display:flex;justify-content:space-between;color:var(--mu);font-size:14px;margin:8px 2px}
+.face{min-height:200px;border-radius:16px;background:var(--card);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;font-size:24px;line-height:1.5;cursor:pointer;user-select:none;transition:transform .35s}
+.face.b{background:var(--pr);color:#fff;border-color:var(--pr)}
+.face small{display:block;font-size:13px;opacity:.7;margin-top:10px}
+.btn{padding:12px 16px;border-radius:10px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font-size:16px;cursor:pointer;flex:1}
+.btn.p{background:var(--pr);color:#fff;border-color:var(--pr)}.btn.g{background:var(--ok);color:#fff;border-color:var(--ok)}.btn.r{background:var(--bad);color:#fff;border-color:var(--bad)}
+.q{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px;font-size:20px;line-height:1.7;margin-bottom:12px}
+input{width:100%;padding:13px;font-size:18px;border-radius:10px;border:2px solid var(--bd);background:var(--card);color:var(--tx);margin-bottom:10px}
+.fb{min-height:26px;font-weight:600;margin:6px 0}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.item{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:8px;line-height:2;font-size:16px}
+.slot{display:inline-block;min-width:96px;min-height:34px;padding:2px 10px;border:2px dashed var(--mu);border-radius:8px;text-align:center;vertical-align:middle;cursor:pointer;line-height:30px;font-weight:600}
+.slot.f{border-style:solid;border-color:var(--pr)}.slot.ok{border-color:var(--ok);color:var(--ok)}.slot.bad{border-color:var(--bad);color:var(--bad)}
+.pool{position:sticky;bottom:0;background:var(--bg);padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--bd)}
+.chip{padding:9px 14px;background:var(--pr);color:#fff;border-radius:20px;touch-action:none;cursor:grab;user-select:none;font-weight:600}
+.chip.sel{outline:3px solid var(--ok)}
+.ghost{position:fixed;pointer-events:none;z-index:9;opacity:.85;transform:translate(-50%,-50%)}
+.end{text-align:center;padding:30px 10px;font-size:20px}
+</style></head><body><div class="w"><h1>📚 英文背誦小幫手</h1><div id="app"></div></div>
+<script>
+const D={
+acc:{n:"配飾單字",i:[["耳環","earrings"],["項鍊","a necklace"],["戒指","a ring"],["手鍊／手環","a bracelet"],["皮夾","a wallet"],["手錶","a watch"],["太陽眼鏡","sunglasses"],["領帶","a tie"]]},
+act:{n:"活動單字",i:[["踢足球","play soccer"],["打棒球","play baseball"],["打網球","play tennis"],["去劇院","go to the theater"],["去博物館","go to a museum"],["去畫廊","go to a gallery"],["享受健行","enjoy hiking"],["享受旅行","enjoy traveling"],["享受烹飪","enjoy cooking"],["做慈善工作","do charity work"],["討論政治","discuss politics"],["做社區服務","do community service"]]},
+cat:{n:"活動分類",i:[["play soccer・play baseball・play tennis","sports"],["go to the theater・go to a museum・go to a gallery","cultural activities"],["enjoy hiking・enjoy traveling・enjoy cooking","hobbies or free-time activities",["hobbies","free-time activities"]],["do charity work・discuss politics・do community service","social issues"]]},
+art:{n:"冠詞 a/an/the/Ø",reuse:1,i:[
+["Anna: Hey Jun! How do you like ___ class?","the"],["Jun: But learning ___ English is difficult!","Ø"],["Anna: I took ___ English class in my home country.","an"],["Anna: Let’s watch ___ soccer game tonight at Joe’s Pizza.","a"],["Jun: Yes! I love ___ soccer!","Ø"],["Jun: What time is ___ game?","the"],["Anna: We’re meeting at 6:00 in ___ school parking lot.","the"],["Jun: I have ___ math test at 5:00.","a"],["Anna: You can meet us at ___ restaurant, then.","the"],
+["All children should get an equal ___ education.","Ø"],["The dove is a symbol of ___ peace.","Ø"],["Did you meet ___ new English teacher?","the"],["I visited ___ art gallery last weekend.","an"],["Did you see ___ baseball game last night?","the"],["I learned ___ Japanese when I lived in Japan.","Ø"],["My friends are really into ___ table tennis.","Ø"],["I want to find ___ book about French cooking.","a"],["She teaches ___ history to college students.","Ø"]]}};
+const $=s=>document.getElementById(s),sh=a=>{a=[...a];for(let i=a.length;i>1;){let j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const S={d:"acc",m:"flip",rev:0};
+const nz=s=>{s=s.toLowerCase().trim().replace(/[.!?,]/g,"");return/^(ø|0|o|x|none|-|無)$/.test(s)?"ø":s},st=s=>s.replace(/^(a|an|the) /,"");
+const chk=(it,x)=>{x=nz(x);return[it[1],...(it[2]||[])].map(nz).some(c=>c==x||(c.length>3&&st(c)==st(x)))};
+const items=()=>D[S.d].i;
+function start(){S.o=sh(items().map((_,k)=>k));S.i=0;S.f=0;S.ok=0;S.bad=0;S.fb="";S.dn=0;if(S.m=="drag")setG();render()}
+function setG(){const ids=sh(items().map((_,k)=>k)).slice(0,6),d=D[S.d];let v=d.reuse?[...new Set(ids.map(k=>items()[k][1]))]:ids.map(k=>items()[k][1]);S.g={ids,s:{},sel:null,c:0,ch:sh(v).map((x,k)=>({id:k,v:x}))}}
+const cur=()=>items()[S.o[S.i]];
+function nav(){return`<div class="row">${Object.keys(D).map(k=>`<button class="t ${k==S.d?"on":""}" onclick="S.d='${k}';start()">${D[k].n}</button>`).join("")}</div>
+<div class="row">${[["flip","🃏 翻牌"],["drag","👆 拖移"],["type","⌨️ 打字"]].map(([k,n])=>`<button class="t ${k==S.m?"on":""}" onclick="S.m='${k}';start()">${n}</button>`).join("")}</div>`}
+function render(){let h=nav();if(S.m=="flip")h+=vFlip();else if(S.m=="type")h+=vType();else h+=vDrag();$("app").innerHTML=h;const e=$("in");if(e){e.focus()}}
+function endv(){return`<div class="end">🎉 完成！<br>答對 ${S.ok} ／ 答錯 ${S.bad}<br><br><button class="btn p" onclick="start()">再來一次</button></div>`}
+function vFlip(){if(S.i>=S.o.length)return`<div class="end">🎉 全部會了！<br><br><button class="btn p" onclick="start()">再來一次</button></div>`;
+const it=cur(),fill=(t,a)=>t.replace("___","【"+a+"】");let f=S.rev?it[1]:it[0],b=S.rev?fill(it[0],it[1]):it[1];if(!S.rev&&it[0].includes("___")){b=fill(it[0],it[1])}
+return`<div class="bar"><span>${S.i+1} / ${S.o.length}</span><span style="cursor:pointer" onclick="S.rev=!S.rev;S.f=0;render()">⇄ 切換正反面</span></div>
+<div class="face ${S.f?"b":""}" onclick="S.f=!S.f;render()">${S.f?b:f}<small>${S.f?"":"點一下翻面"}</small></div>
+<div class="row" style="margin-top:12px"><button class="btn r" onclick="S.o.push(S.o[S.i]);S.i++;S.f=0;render()">不熟</button><button class="btn g" onclick="S.i++;S.f=0;render()">會了</button></div>`}
+function vType(){if(S.i>=S.o.length)return endv();const it=cur(),art=D[S.d].reuse;
+return`<div class="bar"><span>${S.i+1} / ${S.o.length}</span><span>✅${S.ok} ❌${S.bad}</span></div><div class="q">${it[0]}</div>
+<input id="in" autocomplete="off" autocapitalize="off" placeholder="${art?"輸入 a / an / the / Ø":"輸入答案"}" onkeydown="if(event.key=='Enter')go()" ${S.done?"disabled":""}>
+<div class="row">${art?`<button class="btn" onclick="$('in').value+='Ø'">Ø</button>`:""}<button class="btn p" onclick="go()">${S.done?"下一題":"檢查"}</button></div><div class="fb ${S.cl||""}">${S.fb}</div>`}
+function go(){if(S.done){S.done=0;S.fb="";S.i++;render();return}const it=cur(),v=$("in").value;if(!v.trim())return;
+if(chk(it,v)){S.ok++;S.cl="ok";S.fb="✔ 正確！"}else{S.bad++;S.cl="bad";S.fb="✘ 正確答案："+it[1]}S.done=1;render();$("in").value=v}
+function vDrag(){const g=S.g,d=D[S.d],used=Object.values(g.s);let sc=0;
+const rows=g.ids.map((k,r)=>{const it=items()[k],c=g.s[r],v=c!=null?g.ch.find(x=>x.id==c).v:"",cl=g.c&&c!=null?(v==it[1]?"ok":"bad"):"";if(cl=="ok")sc++;
+const sl=`<span class="slot ${c!=null?"f":""} ${cl}" data-slot="${r}" onclick="sc(${r})">${v||"　"}</span>`;
+return`<div class="item">${it[0].includes("___")?it[0].replace("___",sl):it[0]+" → "+sl}${g.c&&cl=="bad"?` <small class="bad">（${it[1]}）</small>`:""}</div>`}).join("");
+const pool=g.ch.filter(x=>d.reuse||!used.includes(x.id)).map(x=>`<span class="chip ${g.sel==x.id?"sel":""}" data-c="${x.id}">${x.v}</span>`).join("");
+return`<div class="bar"><span>把下方選項拖到空格（也可先點選項再點空格）</span>${g.c?`<span>${sc}/${g.ids.length}</span>`:""}</div>${rows}
+<div class="row"><button class="btn p" onclick="S.g.c=1;render()">檢查</button><button class="btn" onclick="setG();render()">換一組</button></div><div class="pool">${pool}</div>`}
+function put(r,c){const g=S.g;if(g.c)return;if(!D[S.d].reuse)for(const k in g.s)if(g.s[k]==c)delete g.s[k];g.s[r]=c;g.sel=null;render()}
+function sc(r){const g=S.g;if(g.c)return;if(g.sel!=null)put(r,g.sel);else{delete g.s[r];render()}}
+let gh=null,dg=null;
+document.addEventListener("pointerdown",e=>{const c=e.target.closest(".chip");if(!c)return;dg={id:+c.dataset.c,x:e.clientX,y:e.clientY,mv:0,t:c.textContent}});
+document.addEventListener("pointermove",e=>{if(!dg)return;if(!dg.mv&&Math.hypot(e.clientX-dg.x,e.clientY-dg.y)>6){dg.mv=1;gh=document.createElement("div");gh.className="chip ghost";gh.textContent=dg.t;document.body.appendChild(gh)}
+if(gh){gh.style.left=e.clientX+"px";gh.style.top=e.clientY+"px"}});
+document.addEventListener("pointerup",e=>{if(!dg)return;const d=dg;dg=null;if(gh){gh.remove();gh=null}
+if(!d.mv){S.g.sel=S.g.sel==d.id?null:d.id;render();return}
+const s=document.elementFromPoint(e.clientX,e.clientY)?.closest("[data-slot]");if(s)put(+s.dataset.slot,d.id)});
+document.addEventListener("pointercancel",()=>{if(gh)gh.remove();gh=null;dg=null});
+start();
+</script></body></html>

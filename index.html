@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hant"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>115學年第一學期英文期中考</title>
+<title>英文背誦小幫手</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--tx:#1d2433;--mu:#6b7488;--pr:#3b6ef5;--ok:#1f9d55;--bad:#d64545;--bd:#dde3ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121620;--card:#1c2230;--tx:#eef1f8;--mu:#97a1b8;--pr:#6b93ff;--ok:#43c47c;--bad:#ff7070;--bd:#2c3447}}
@@ -29,7 +29,7 @@ input{width:100%;padding:13px;font-size:18px;border-radius:10px;border:2px solid
 .chip.sel{outline:3px solid var(--ok)}
 .ghost{position:fixed;pointer-events:none;z-index:9;opacity:.85;transform:translate(-50%,-50%)}
 .ex{display:block;color:var(--mu);font-size:14px;line-height:1.5}.opt{cursor:pointer;font-size:18px}.opt.ok{border-color:var(--ok);color:var(--ok);font-weight:600}.opt.bad{border-color:var(--bad);color:var(--bad)}.pic{position:relative;container-type:inline-size;border-radius:12px;overflow:hidden;border:1px solid var(--bd);margin-bottom:10px}.pic img{width:100%;height:auto;display:block}.bk{position:absolute;display:flex;align-items:center;justify-content:center;background:#fff;border:1.5px dashed #6b7488;border-radius:4px;font-size:var(--f,2.8cqw);line-height:1.1;text-align:center;overflow:hidden;font-weight:700;cursor:pointer;color:#1d2433;box-sizing:border-box}.bk.q0{color:#9aa3b5}.bk.ok{background:#d6f5e0;border:1.5px solid #1f9d55;color:#157a41}.bk.bad{background:#fde0e0;border:1.5px solid #d64545;color:#b02a2a}.bk.act{border:2px solid #3b6ef5;box-shadow:0 0 0 2px rgba(59,110,245,.35)}.pw{overflow-x:auto;margin-bottom:10px}.pw .pic{margin-bottom:0}.pool{max-height:38vh;overflow:auto}.opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.opts .opt{flex:1 1 120px;text-align:center;margin-bottom:0}.bk input.bi{width:100%;height:100%;border:0;background:transparent;text-align:center;font:inherit;color:inherit;padding:0;margin:0;outline:none;border-radius:0}.end{text-align:center;padding:30px 10px;font-size:20px}
-</style></head><body><div class="w"><h1>115學年第一學期英文期中考</h1><div id="app"></div></div>
+</style></head><body><div class="w"><h1>📚 英文背誦小幫手</h1><div id="app"></div></div>
 <script>
 const D={
 acc:{n:"配飾單字",i:[["耳環","earrings",null,"She wears small gold ___ every day."],["項鍊","a necklace",null,"My sister got ___ for her birthday."],["戒指","a ring",null,"He gave her ___ on their anniversary."],["手鍊／手環","a bracelet",null,"She is wearing ___ made of pearls."],["皮夾","a wallet",null,"I keep my money and cards in ___."],["手錶","a watch",null,"I check the time on ___ every morning."],["太陽眼鏡","sunglasses",null,"It’s sunny, so I put on my ___."],["領帶","a tie",null,"He wears ___ to work every day."]]},
@@ -70,7 +70,7 @@ if(c=="ok")ok++;if(m!="flip"&&m!="drag"&&i==P.act)c+=" act";
 return`<div class="bk ${c}" data-slot="${i}" style="left:${b[0]}%;top:${b[1]}%;width:${b[2]}%;height:${b[3]}%" onclick="bk(${i})">${m=="type"&&i==P.act?`<input id="in" class="bi" autocomplete="off" autocapitalize="off" value="${(v||"").replace(/"/g,"&quot;")}" onclick="event.stopPropagation()" onkeydown="if(event.key=='Enter')pty()">`:t}</div>`}).join("");
 let ctl="";
 if(m=="flip")ctl=`<div class="bar"><span>點空格翻牌</span></div><div class="row"><button class="btn" onclick="rvAll(1)">全部顯示</button><button class="btn" onclick="rvAll(0)">全部隱藏</button></div>`;
-else if(m=="mc")ctl=`<div class="bar"><span>第 ${P.act+1} 格　✅ ${ok} / ${d.b.length}</span></div><div class="opts">${mo().map((x,k)=>`<div class="item opt" onclick="pk(${k})">${String.fromCharCode(65+k)}. ${x}</div>`).join("")}</div>${pbtn()}`;
+else if(m=="mc")ctl=`<div class="bar"><span>第 ${P.act+1} 格　✅ ${ok} / ${d.b.length}</span></div><div class="opts">${mo().map((x,k)=>`<div class="item opt" onclick="pk(${k})">${String.fromCharCode(65+k)}. ${x} <small style="opacity:.5">[${k+1}]</small></div>`).join("")}</div>${pbtn()}`;
 else if(m=="type")ctl=`<div class="bar"><span>第 ${P.act+1} 格　✅ ${ok} / ${d.b.length}</span><span>直接在藍框內輸入，Enter 確認</span></div><div class="row">${d.o?"":`<button class="btn" onclick="$('in').value+='Ø';$('in').focus()">Ø</button>`}<button class="btn p" onclick="pty()">確定</button></div>${pbtn()}`;
 else ctl=`<div class="bar"><span>拖到空格，或先點選項再點空格</span>${P.c?`<span>✅ ${ok} / ${d.b.length}</span>`:""}</div><div class="row"><button class="btn p" onclick="S.p.c=1;render()">檢查</button><button class="btn" onclick="start()">重置</button></div><div class="pool">${P.ch.map((x,k)=>d.o&&Object.values(P.v).includes(x)?"":`<span class="chip ${P.sel===k?"sel":""}" data-c="${k}">${x}</span>`).join("")}</div>`;
 return`<div class="pw"><div class="pic" style="${d.mw?"min-width:"+d.mw+"px;":""}--f:${d.f||"2.8cqw"}"><img src="${d.img}" alt="" width="${d.w}" height="${d.h}">${bx}</div></div>${ctl}`}
@@ -91,7 +91,7 @@ function vMC(){if(S.i>=S.o.length)return endv();const it=cur(),R=S.rev&&(S.d=="a
 if(!S.opt){const pool=[...new Set(items().map(x=>R?x[0]:x[1]))],AR=["a","an","the","Ø"];S.opt=pool.every(x=>AR.includes(x))?AR:sh([c,...sh(pool.filter(x=>x!=c)).slice(0,3)])}
 const done=S.pk!=null;
 return`<div class="bar"><span>${S.i+1} / ${S.o.length}　✅${S.ok} ❌${S.bad}</span>${S.d=="acc"||S.d=="act"?`<span style="cursor:pointer" onclick="S.rev=!S.rev;S.opt=null;S.pk=null;render()">⇄ ${R?"英→中":"中→英"}</span>`:""}</div>
-<div class="q">${q}</div><div class="opts">${S.opt.map((x,k)=>`<div class="item opt ${done?(x==c?"ok":k==S.pk?"bad":""):""}" onclick="pick(${k})">${String.fromCharCode(65+k)}. ${x}</div>`).join("")}</div>
+<div class="q">${q}</div><div class="opts">${S.opt.map((x,k)=>`<div class="item opt ${done?(x==c?"ok":k==S.pk?"bad":""):""}" onclick="pick(${k})">${String.fromCharCode(65+k)}. ${x} <small style="opacity:.5">[${k+1}]</small></div>`).join("")}</div>
 ${done?`<div class="row" style="margin-top:8px"><button class="btn p" onclick="S.i++;S.opt=null;S.pk=null;render()">下一題</button></div>`:""}`}
 function pick(k){if(S.pk!=null)return;S.pk=k;if(S.opt[k]==mcC())S.ok++;else{S.bad++;S.wr.push(S.o[S.i])}render()}
 function vFlip(){if(S.i>=S.o.length)return`<div class="end">🎉 全部會了！<br><br><button class="btn p" onclick="start()">再來一次</button></div>`;
@@ -126,5 +126,6 @@ document.addEventListener("keydown",e=>{if(e.key!="Enter"||/^(INPUT|BUTTON)$/.te
 if(d.img){const P=S.p,n=d.b.length;if(S.m=="flip"){const j=d.b.findIndex((_,i)=>!P.rv[i]);if(j>=0){P.rv[j]=1;flipBox(j)}}else if(S.m=="mc"||S.m=="type"){P.act=(P.act+1)%n;render()}return}
 if(S.m=="type"){if(S.done)go();return}if(S.i>=S.o.length)return;
 if(S.m=="flip"){if(!S.f)S.f=1;else{S.i++;S.f=0}render()}else if(S.m=="mc"&&S.pk!=null){S.i++;S.opt=null;S.pk=null;render()}});
+document.addEventListener("keydown",e=>{if(S.m!="mc"||!/^[1-4]$/.test(e.key)||/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName))return;const k=+e.key-1;if(D[S.d].img){if(k<mo().length)pk(k)}else if(S.pk==null&&S.opt&&k<S.opt.length)pick(k)});
 start();
 </script></body></html>

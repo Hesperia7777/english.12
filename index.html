@@ -10,7 +10,7 @@ body{background:var(--bg);color:var(--tx);font-family:-apple-system,"Noto Sans T
 .w{max-width:680px;margin:0 auto;padding:14px}
 h1{font-size:20px;margin:6px 0 12px}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.t{flex:1;min-width:0;padding:10px 6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px;cursor:pointer}
+.t{flex:1 1 30%;min-width:0;padding:10px 6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font-size:14px;cursor:pointer}
 .t.on{background:var(--pr);color:#fff;border-color:var(--pr)}
 .bar{display:flex;justify-content:space-between;color:var(--mu);font-size:14px;margin:8px 2px}
 .face{min-height:200px;border-radius:16px;background:var(--card);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;font-size:24px;line-height:1.5;cursor:pointer;user-select:none;transition:transform .35s}
@@ -28,35 +28,52 @@ input{width:100%;padding:13px;font-size:18px;border-radius:10px;border:2px solid
 .chip{padding:9px 14px;background:var(--pr);color:#fff;border-radius:20px;touch-action:none;cursor:grab;user-select:none;font-weight:600}
 .chip.sel{outline:3px solid var(--ok)}
 .ghost{position:fixed;pointer-events:none;z-index:9;opacity:.85;transform:translate(-50%,-50%)}
-.end{text-align:center;padding:30px 10px;font-size:20px}
+.ex{display:block;color:var(--mu);font-size:14px;line-height:1.5}.opt{cursor:pointer;font-size:18px}.opt.ok{border-color:var(--ok);color:var(--ok);font-weight:600}.opt.bad{border-color:var(--bad);color:var(--bad)}.end{text-align:center;padding:30px 10px;font-size:20px}
 </style></head><body><div class="w"><h1>📚 英文背誦小幫手</h1><div id="app"></div></div>
 <script>
 const D={
-acc:{n:"配飾單字",i:[["耳環","earrings"],["項鍊","a necklace"],["戒指","a ring"],["手鍊／手環","a bracelet"],["皮夾","a wallet"],["手錶","a watch"],["太陽眼鏡","sunglasses"],["領帶","a tie"]]},
-act:{n:"活動單字",i:[["踢足球","play soccer"],["打棒球","play baseball"],["打網球","play tennis"],["去劇院","go to the theater"],["去博物館","go to a museum"],["去畫廊","go to a gallery"],["享受健行","enjoy hiking"],["享受旅行","enjoy traveling"],["享受烹飪","enjoy cooking"],["做慈善工作","do charity work"],["討論政治","discuss politics"],["做社區服務","do community service"]]},
+acc:{n:"配飾單字",i:[["耳環","earrings",null,"She wears small gold ___ every day."],["項鍊","a necklace",null,"My sister got ___ for her birthday."],["戒指","a ring",null,"He gave her ___ on their anniversary."],["手鍊／手環","a bracelet",null,"She is wearing ___ made of pearls."],["皮夾","a wallet",null,"I keep my money and cards in ___."],["手錶","a watch",null,"I check the time on ___ every morning."],["太陽眼鏡","sunglasses",null,"It’s sunny, so I put on my ___."],["領帶","a tie",null,"He wears ___ to work every day."]]},
+act:{n:"活動單字",i:[["踢足球","play soccer",null,"After school, my brother likes to ___ with his friends."],["打棒球","play baseball",null,"Many kids in the U.S. ___ in the summer."],["打網球","play tennis",null,"She wants to ___ on the weekend."],["去劇院","go to the theater",null,"We want to ___ on Friday night."],["去博物館","go to a museum",null,"I like to ___ to learn about history."],["去畫廊","go to a gallery",null,"Let’s ___ to see some paintings."],["享受健行","enjoy hiking",null,"I ___ in the mountains every weekend."],["享受旅行","enjoy traveling",null,"My parents ___ around the world."],["享受烹飪","enjoy cooking",null,"She ___ and makes dinner for friends."],["做慈善工作","do charity work",null,"He likes to ___ to help people in need."],["討論政治","discuss politics",null,"My uncle loves to ___ with his friends."],["做社區服務","do community service",null,"Students ___ by cleaning up the park."]]},
 cat:{n:"活動分類",i:[["play soccer・play baseball・play tennis","sports"],["go to the theater・go to a museum・go to a gallery","cultural activities"],["enjoy hiking・enjoy traveling・enjoy cooking","hobbies or free-time activities",["hobbies","free-time activities"]],["do charity work・discuss politics・do community service","social issues"]]},
-art:{n:"冠詞 a/an/the/Ø",reuse:1,i:[
+art:{n:"冠詞（課本）",reuse:1,i:[
 ["Anna: Hey Jun! How do you like ___ class?","the"],["Jun: But learning ___ English is difficult!","Ø"],["Anna: I took ___ English class in my home country.","an"],["Anna: Let’s watch ___ soccer game tonight at Joe’s Pizza.","a"],["Jun: Yes! I love ___ soccer!","Ø"],["Jun: What time is ___ game?","the"],["Anna: We’re meeting at 6:00 in ___ school parking lot.","the"],["Jun: I have ___ math test at 5:00.","a"],["Anna: You can meet us at ___ restaurant, then.","the"],
-["All children should get an equal ___ education.","Ø"],["The dove is a symbol of ___ peace.","Ø"],["Did you meet ___ new English teacher?","the"],["I visited ___ art gallery last weekend.","an"],["Did you see ___ baseball game last night?","the"],["I learned ___ Japanese when I lived in Japan.","Ø"],["My friends are really into ___ table tennis.","Ø"],["I want to find ___ book about French cooking.","a"],["She teaches ___ history to college students.","Ø"]]}};
+["All children should get an equal ___ education.","Ø"],["The dove is a symbol of ___ peace.","Ø"],["Did you meet ___ new English teacher?","the"],["I visited ___ art gallery last weekend.","an"],["Did you see ___ baseball game last night?","the"],["I learned ___ Japanese when I lived in Japan.","Ø"],["My friends are really into ___ table tennis.","Ø"],["I want to find ___ book about French cooking.","a"],["She teaches ___ history to college students.","Ø"]]},
+art2:{n:"冠詞加練",reuse:1,i:[["I have ___ umbrella in my bag.","an"],["___ sun rises in the east.","the"],["She plays ___ guitar very well.","the"],["My brother loves ___ basketball.","Ø"],["Can you open ___ window? It’s hot in here.","the"],["He is ___ honest man.","an"],["I need ___ new phone.","a"],["She is ___ engineer.","an"],["I’m going to ___ bank to get some cash.","the"],["___ children in the park are playing.","the"],["My father works at ___ university.","a"],["She speaks ___ Spanish and French.","Ø"],["What ___ beautiful day!","a"],["He is ___ best player on the team.","the"],["___ Pacific Ocean is huge.","the"]]}};
+const mk=(k,n,d)=>{D[k]={n:n,i:D[d].i.map(x=>[x[3]+"（"+x[0]+"）",x[1]])}};
+mk("acc2","配飾例句","acc");
+D.acc.i=D.acc.i.map(x=>x.slice(0,3));D.act.i=D.act.i.map(x=>x.slice(0,3));
+
+D.cat2={n:"分類：單字→類別",reuse:1,i:D.cat.i.flatMap(x=>x[0].split("・").map(w=>[w,x[1],x[2]||null]))};
+D.vb={n:"動詞搭配",reuse:1,i:[["___ soccer（踢足球）","play"],["___ baseball（打棒球）","play"],["___ tennis（打網球）","play"],["___ to the theater（去劇院）","go"],["___ to a museum（去博物館）","go"],["___ to a gallery（去畫廊）","go"],["___ hiking（享受健行）","enjoy"],["___ traveling（享受旅行）","enjoy"],["___ cooking（享受烹飪）","enjoy"],["___ charity work（做慈善）","do"],["___ community service（做社區服務）","do"],["___ politics（討論政治）","discuss"]]};
+D.acc3={n:"配飾冠詞",reuse:1,i:[["I need ___ new wallet.","a"],["She wears ___ earrings every day.","Ø"],["He is wearing ___ tie with blue stripes.","a"],["Can you pass me ___ sunglasses on the table?","the"],["My sister loves ___ bracelets.","Ø"],["I bought ___ necklace for my mom.","a"],["___ watch on the desk is mine.","the"],["She got ___ ring from her grandmother.","a"]]};
+D.act3={n:"活動冠詞",reuse:1,i:[["I play ___ tennis on Saturdays.","Ø"],["Is ___ gallery on Main Street open today?","the"],["She wants to go to ___ art gallery this weekend.","an"],["He loves ___ politics and talks about it a lot.","Ø"],["We saw ___ play at the theater last night.","a"],["My cousin does ___ charity work every month.","Ø"],["Did you watch ___ baseball game on TV last night?","the"],["I enjoy ___ hiking with my dad.","Ø"],["She started ___ new community service club.","a"]]};
+const O=["acc","act","acc2","cat","cat2","vb","acc3","act3","art","art2"];
 const $=s=>document.getElementById(s),sh=a=>{a=[...a];for(let i=a.length;i>1;){let j=Math.random()*i--|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const S={d:"acc",m:"flip",rev:0};
 const nz=s=>{s=s.toLowerCase().trim().replace(/[.!?,]/g,"");return/^(ø|0|o|x|none|-|無)$/.test(s)?"ø":s},st=s=>s.replace(/^(a|an|the) /,"");
 const chk=(it,x)=>{x=nz(x);return[it[1],...(it[2]||[])].map(nz).some(c=>c==x||(c.length>3&&st(c)==st(x)))};
 const items=()=>D[S.d].i;
-function start(){S.o=sh(items().map((_,k)=>k));S.i=0;S.f=0;S.ok=0;S.bad=0;S.fb="";S.dn=0;if(S.m=="drag")setG();render()}
+function start(w){S.o=sh(w||items().map((_,k)=>k));S.wr=[];S.i=0;S.f=0;S.ok=0;S.bad=0;S.fb="";S.dn=0;S.opt=null;S.pk=null;if(S.m=="drag")setG();render()}
 function setG(){const ids=sh(items().map((_,k)=>k)).slice(0,6),d=D[S.d];let v=d.reuse?[...new Set(ids.map(k=>items()[k][1]))]:ids.map(k=>items()[k][1]);S.g={ids,s:{},sel:null,c:0,ch:sh(v).map((x,k)=>({id:k,v:x}))}}
 const cur=()=>items()[S.o[S.i]];
-function nav(){return`<div class="row">${Object.keys(D).map(k=>`<button class="t ${k==S.d?"on":""}" onclick="S.d='${k}';start()">${D[k].n}</button>`).join("")}</div>
-<div class="row">${[["flip","🃏 翻牌"],["drag","👆 拖移"],["type","⌨️ 打字"]].map(([k,n])=>`<button class="t ${k==S.m?"on":""}" onclick="S.m='${k}';start()">${n}</button>`).join("")}</div>`}
-function render(){let h=nav();if(S.m=="flip")h+=vFlip();else if(S.m=="type")h+=vType();else h+=vDrag();$("app").innerHTML=h;const e=$("in");if(e){e.focus()}}
-function endv(){return`<div class="end">🎉 完成！<br>答對 ${S.ok} ／ 答錯 ${S.bad}<br><br><button class="btn p" onclick="start()">再來一次</button></div>`}
+function nav(){return`<select class="t" style="width:100%;margin-bottom:10px;font-size:16px" onchange="S.d=this.value;start()">${O.map(k=>`<option value="${k}" ${k==S.d?"selected":""}>${D[k].n}</option>`).join("")}</select><div class="row">${[["flip","🃏 翻牌"],["mc","✅ 選擇"],["drag","👆 拖移"],["type","⌨️ 打字"]].map(([k,n])=>`<button class="t ${k==S.m?"on":""}" style="flex:1 1 20%;padding:10px 2px" onclick="S.m='${k}';start()">${n}</button>`).join("")}</div>`}
+function render(){let h=nav();if(S.m=="flip")h+=vFlip();else if(S.m=="type")h+=vType();else if(S.m=="mc")h+=vMC();else h+=vDrag();$("app").innerHTML=h;const e=$("in");if(e){e.focus()}}
+function endv(){const w=S.m=="mc"&&S.wr&&S.wr.length;return`<div class="end">${w?"再接再厲！":"🎉 完成！"}<br>答對 ${S.ok} ／ 答錯 ${S.bad}<br><br><div class="row">${w?`<button class="btn r" onclick="start([${S.wr}])">錯誤練習（${S.wr.length}題）</button>`:""}<button class="btn p" onclick="start()">再試一次</button></div></div>`}
+const mcC=()=>{const it=cur();return S.rev&&(S.d=="acc"||S.d=="act")?it[0]:it[1]};
+function vMC(){if(S.i>=S.o.length)return endv();const it=cur(),R=S.rev&&(S.d=="acc"||S.d=="act"),q=R?it[1]:it[0],c=mcC();
+if(!S.opt){const pool=[...new Set(items().map(x=>R?x[0]:x[1]))],AR=["a","an","the","Ø"];S.opt=pool.every(x=>AR.includes(x))?AR:sh([c,...sh(pool.filter(x=>x!=c)).slice(0,3)])}
+const done=S.pk!=null;
+return`<div class="bar"><span>${S.i+1} / ${S.o.length}　✅${S.ok} ❌${S.bad}</span>${S.d=="acc"||S.d=="act"?`<span style="cursor:pointer" onclick="S.rev=!S.rev;S.opt=null;S.pk=null;render()">⇄ ${R?"英→中":"中→英"}</span>`:""}</div>
+<div class="q">${q}</div>${S.opt.map((x,k)=>`<div class="item opt ${done?(x==c?"ok":k==S.pk?"bad":""):""}" onclick="pick(${k})">${String.fromCharCode(65+k)}. ${x}</div>`).join("")}
+${done?`<div class="row" style="margin-top:8px"><button class="btn p" onclick="S.i++;S.opt=null;S.pk=null;render()">下一題</button></div>`:""}`}
+function pick(k){if(S.pk!=null)return;S.pk=k;if(S.opt[k]==mcC())S.ok++;else{S.bad++;S.wr.push(S.o[S.i])}render()}
 function vFlip(){if(S.i>=S.o.length)return`<div class="end">🎉 全部會了！<br><br><button class="btn p" onclick="start()">再來一次</button></div>`;
 const it=cur(),fill=(t,a)=>t.replace("___","【"+a+"】");let f=S.rev?it[1]:it[0],b=S.rev?fill(it[0],it[1]):it[1];if(!S.rev&&it[0].includes("___")){b=fill(it[0],it[1])}
 return`<div class="bar"><span>${S.i+1} / ${S.o.length}</span><span style="cursor:pointer" onclick="S.rev=!S.rev;S.f=0;render()">⇄ 切換正反面</span></div>
-<div class="face ${S.f?"b":""}" onclick="S.f=!S.f;render()">${S.f?b:f}<small>${S.f?"":"點一下翻面"}</small></div>
+<div class="face ${S.f?"b":""}" onclick="S.f=!S.f;render()">${S.f?b+(it[3]?`<small>${it[3].replace("___","【"+it[1]+"】")}</small>`:""):f}${S.f?"":"<small>點一下翻面</small>"}</div>
 <div class="row" style="margin-top:12px"><button class="btn r" onclick="S.o.push(S.o[S.i]);S.i++;S.f=0;render()">不熟</button><button class="btn g" onclick="S.i++;S.f=0;render()">會了</button></div>`}
 function vType(){if(S.i>=S.o.length)return endv();const it=cur(),art=D[S.d].reuse;
-return`<div class="bar"><span>${S.i+1} / ${S.o.length}</span><span>✅${S.ok} ❌${S.bad}</span></div><div class="q">${it[0]}</div>
+return`<div class="bar"><span>${S.i+1} / ${S.o.length}</span><span>✅${S.ok} ❌${S.bad}</span></div><div class="q">${it[0]}${it[3]?`<small class="ex" style="margin-top:8px;font-size:16px">${it[3]}</small>`:""}</div>
 <input id="in" autocomplete="off" autocapitalize="off" placeholder="${art?"輸入 a / an / the / Ø":"輸入答案"}" onkeydown="if(event.key=='Enter')go()" ${S.done?"disabled":""}>
 <div class="row">${art?`<button class="btn" onclick="$('in').value+='Ø'">Ø</button>`:""}<button class="btn p" onclick="go()">${S.done?"下一題":"檢查"}</button></div><div class="fb ${S.cl||""}">${S.fb}</div>`}
 function go(){if(S.done){S.done=0;S.fb="";S.i++;render();return}const it=cur(),v=$("in").value;if(!v.trim())return;
@@ -64,7 +81,7 @@ if(chk(it,v)){S.ok++;S.cl="ok";S.fb="✔ 正確！"}else{S.bad++;S.cl="bad";S.fb
 function vDrag(){const g=S.g,d=D[S.d],used=Object.values(g.s);let sc=0;
 const rows=g.ids.map((k,r)=>{const it=items()[k],c=g.s[r],v=c!=null?g.ch.find(x=>x.id==c).v:"",cl=g.c&&c!=null?(v==it[1]?"ok":"bad"):"";if(cl=="ok")sc++;
 const sl=`<span class="slot ${c!=null?"f":""} ${cl}" data-slot="${r}" onclick="sc(${r})">${v||"　"}</span>`;
-return`<div class="item">${it[0].includes("___")?it[0].replace("___",sl):it[0]+" → "+sl}${g.c&&cl=="bad"?` <small class="bad">（${it[1]}）</small>`:""}</div>`}).join("");
+return`<div class="item">${it[0].includes("___")?it[0].replace("___",sl):it[0]+" → "+sl+(it[3]?`<small class="ex">${it[3]}</small>`:"")}${g.c&&cl=="bad"?` <small class="bad">（${it[1]}）</small>`:""}</div>`}).join("");
 const pool=g.ch.filter(x=>d.reuse||!used.includes(x.id)).map(x=>`<span class="chip ${g.sel==x.id?"sel":""}" data-c="${x.id}">${x.v}</span>`).join("");
 return`<div class="bar"><span>把下方選項拖到空格（也可先點選項再點空格）</span>${g.c?`<span>${sc}/${g.ids.length}</span>`:""}</div>${rows}
 <div class="row"><button class="btn p" onclick="S.g.c=1;render()">檢查</button><button class="btn" onclick="setG();render()">換一組</button></div><div class="pool">${pool}</div>`}
